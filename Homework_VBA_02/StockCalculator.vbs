@@ -45,7 +45,9 @@ Sub StockVolumeCalc()
                 
                 
                 'Display Yearly Change
-                ws.Cells(LastAggRow, 10).Value = ws.Cells(i, 6).Value - ws.Cells(TickerFirstValue, 3).Value
+                ws.Cells(LastAggRow, 10).Value = Format(ws.Cells(i, 6).Value - ws.Cells(TickerFirstValue, 3).Value, "0.00000000")
+            
+                
                 'Format the background color
                 If (ws.Cells(LastAggRow, 10).Value > 0) Then
                     ws.Cells(LastAggRow, 10).Interior.ColorIndex = 4 'Green
@@ -59,7 +61,8 @@ Sub StockVolumeCalc()
                 'new end value =>(ws.Cells(i, 3).Value))
                 ' Included if statement incase of any 0 values in the stock price
                 If (ws.Cells(TickerFirstValue, 3).Value) <> 0 Then
-                    ws.Cells(LastAggRow, 11).Value = Format(((ws.Cells(i, 3).Value) - (ws.Cells(TickerFirstValue, 3).Value)) / (ws.Cells(TickerFirstValue, 3).Value), "Percent")
+                    ws.Cells(LastAggRow, 11).Value = Format(((ws.Cells(i, 3).Value) - (ws.Cells(TickerFirstValue, 3).Value)) / (ws.Cells(TickerFirstValue, 3).Value), "0.00%")
+                    
                 Else
                     ws.Cells(LastAggRow, 11).Value = 0
                 End If
@@ -86,22 +89,8 @@ Sub StockVolumeCalc()
         Next i
         
         
-        'ws.Range("K2:K" & (LastAggRow)).NumberFormat = "0.00"
-        'ws.Range("K2:K" & (LastAggRow)).Style = "Percent"
+        
    
-        'MsgBox (Application.WorksheetFunction.Max(Columns("K")))
-        
-        '--For each worksheet, identify the following and their ticker symbol
-        ' (1) greatest % increase
-        ' (2) greatest % decrease
-        ' (3) greatest stock volume
-        
-        'get row count for column K
-        ' if value in Column J is -ve or background is red then calc greatest decrease % percent
-        ' else greatest increase %
-        
-        ' Get row count for column L
-        ' calc max stock volume
         
         ' Subtract by 1 to undo the last increment
         LastAggRow = LastAggRow - 1
@@ -132,7 +121,7 @@ Sub StockVolumeCalc()
                     greatestStockVolIndex = x
             End If
              
-           ' Stop
+           
         
         Next x
         
@@ -149,27 +138,22 @@ Sub StockVolumeCalc()
         'ws.Columns("O1:O5").AutoFit
         
         'Greatest +ve Percent increase
-        ws.Cells(2, 17).Style = "Percent"
-        ws.Cells(2, 17).NumberFormat = "0.00"
         ws.Cells(2, 16).Value = ws.Cells(greatestPosIndex, 9).Value 'Ticker symbol
-        ws.Cells(2, 17).Value = ws.Cells(greatestPosIndex, 11).Value '% increase
-       
-        
-        
+        ws.Cells(2, 17).Value = Format(ws.Cells(greatestPosIndex, 11).Value, "0.00%")  '% increase
+    
         
         'Greatest -ve Percent increase
-        ws.Cells(3, 17).Style = "Percent"
-        ws.Cells(3, 17).NumberFormat = "0.00"
+       
         ws.Cells(3, 16).Value = ws.Cells(greatestNegIndex, 9).Value 'Ticker symbol
-        ws.Cells(3, 17).Value = ws.Cells(greatestNegIndex, 11).Value '% increase
-        
-        
+        ws.Cells(3, 17).Value = Format(ws.Cells(greatestNegIndex, 11).Value, "0.00%")   '% increase
+
         
         'Greatest -total stock volume
         ws.Cells(4, 16).Value = ws.Cells(greatestStockVolIndex, 9).Value 'Ticker symbol
         ws.Cells(4, 17).Value = ws.Cells(greatestStockVolIndex, 12).Value '% increase
         
-       
+      
     Next ws
     
 End Sub
+
